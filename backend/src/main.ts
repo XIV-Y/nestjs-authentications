@@ -3,9 +3,13 @@ import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';
+import * as csurf from 'csurf';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(helmet());
 
   // Cookieパーサーの設定
   app.use(cookieParser());
@@ -27,6 +31,17 @@ async function bootstrap() {
   // Passportの初期化
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // CSRFトークンの設定
+  app.use(
+    csurf({
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+      },
+    }),
+  );
 
   await app.listen(3001);
 }
