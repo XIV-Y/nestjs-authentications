@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';
-import * as csurf from 'csurf';
 import helmet from 'helmet';
 
 async function bootstrap() {
@@ -28,7 +27,7 @@ async function bootstrap() {
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // 本番環境ではHTTPSのみ
-        maxAge: 1000 * 60 * 60, // 1時間
+        maxAge: 1000 * 60, // 1分
         sameSite: 'lax',
       },
     }),
@@ -37,17 +36,6 @@ async function bootstrap() {
   // Passportの初期化
   app.use(passport.initialize());
   app.use(passport.session());
-
-  // CSRFトークンの設定
-  app.use(
-    csurf({
-      cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-      },
-    }),
-  );
 
   await app.listen(3001);
 }
