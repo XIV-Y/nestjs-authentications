@@ -4,7 +4,7 @@ import { PassportSerializer } from '@nestjs/passport';
 @Injectable()
 export class CookieBasedSerializer extends PassportSerializer {
   serializeUser(user: any, done: (err: Error, user: any) => void): any {
-    done(null, { id: user.userId, username: user.username });
+    done(null, { userId: user.userId, username: user.username });
   }
 
   deserializeUser(payload: any, done: (err: Error, payload: any) => void): any {

@@ -1,6 +1,7 @@
 import { Controller, Post, UseGuards, Req, Res, Get } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
+import { CookieBasedGuard } from './cookie-based.guard';
 
 @Controller('cookie-based')
 export class CookieBasedController {
@@ -21,7 +22,10 @@ export class CookieBasedController {
 
       return res.send({
         message: 'ログイン成功',
-        user: req.user,
+        user: {
+          userId: req.user.userId,
+          username: req.user.username,
+        },
       });
     });
   }
@@ -43,5 +47,50 @@ export class CookieBasedController {
         });
       });
     });
+  }
+
+  @UseGuards(CookieBasedGuard)
+  @Get('refresh-session')
+  async refreshSession(@Req() req: Request, @Res() res: Response) {
+    const user = req.user;
+
+    const regenerateSession = () => {
+      return new Promise<void>((resolve, reject) => {
+        req.session.regenerate((err) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+        });
+      });
+    };
+
+    try {
+      await regenerateSession();
+
+      req.session.user = user;
+
+      req.login(req.user, (err) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: 'Login failed', error: err.message });
+        }
+
+        return res.send({
+          message: 'セッション更新成功',
+          user: {
+            userId: user.userId,
+            username: user.username,
+          },
+        });
+      });
+    } catch (error) {
+      return res.status(500).send({
+        message: 'セッション更新エラー',
+        error: error.message,
+      });
+    }
   }
 }
