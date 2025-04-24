@@ -5,6 +5,7 @@ import { AuthModule } from '@/src/modules/jwt/jwt.module';
 import { TokenModule } from '@/src/modules/token/token.module';
 import { UsersModule } from '@/src/modules/users/users.module';
 import { CookieBasedModule } from '@/src/modules/cookie-based/cookie-based.module';
+import { BasicAuthModule } from '@/src/modules//basic/basic.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CookieBasedModule } from '@/src/modules/cookie-based/cookie-based.modul
     AuthModule,
     CookieBasedModule,
     TokenModule,
+    BasicAuthModule,
     UsersModule,
   ],
 })
