@@ -5,6 +5,9 @@ declare namespace Express {
   }
 
   export interface Request {
-    session: any;
+    session?: any;
+    token?: string;
+    tokenId?: number;
+    user?: any;
   }
 }

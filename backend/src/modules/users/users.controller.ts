@@ -3,6 +3,7 @@ import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 
 import { JwtAuthGuard } from '@/src/modules/jwt/jwt.guard';
 import { CookieBasedGuard } from '@/src/modules/cookie-based/cookie-based.guard';
+import { TokenGuard } from '@/src/modules//token/token.guard';
 
 @Controller('users')
 export class UsersController {
@@ -10,7 +11,10 @@ export class UsersController {
   // @UseGuards(JwtAuthGuard)
 
   // Cookie認証を使用する場合
-  @UseGuards(CookieBasedGuard)
+  // @UseGuards(CookieBasedGuard)
+
+  // Token認証を使用する場合
+  @UseGuards(TokenGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

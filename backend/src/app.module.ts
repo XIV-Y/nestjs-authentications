@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { AuthModule } from '@/src/modules/jwt/jwt.module';
+import { TokenModule } from '@/src/modules/token/token.module';
 import { UsersModule } from '@/src/modules/users/users.module';
 import { CookieBasedModule } from '@/src/modules/cookie-based/cookie-based.module';
 
@@ -12,6 +13,7 @@ import { CookieBasedModule } from '@/src/modules/cookie-based/cookie-based.modul
     }),
     AuthModule,
     CookieBasedModule,
+    TokenModule,
     UsersModule,
   ],
 })
